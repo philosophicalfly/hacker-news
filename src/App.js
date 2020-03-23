@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 require('./App.css');
 
 const list = [
@@ -8,17 +8,18 @@ const list = [
     author: 'Jordan Walke',
     num_comments: 3,
     points: 4,
-    objectID: 0,
-  },
-  {
+    objectID: 0
+  }, {
     title: 'Redux',
     url: 'https://redux.js.org/',
     author: 'Dan Abramov, Andrew Clark',
     num_comments: 2,
     points: 5,
-    objectID: 1,
-  },
+    objectID: 1
+  }
 ];
+
+const isSearched = (searchTerm) => (item) => item.title.toLowerCase().includes(searchTerm.toLowerCase());
 
 class App extends Component {
 
@@ -26,26 +27,52 @@ class App extends Component {
     super(props);
 
     this.state = {
-      list: list,
+      list,
+      filter: ''
     };
+    this.onDismiss = this.onDismiss.bind(this);
+    this.setFilter = this.setFilter.bind(this);
+    this.isSubstringOf = this.isSubstringOf.bind(this)
+  }
 
+  onDismiss(dismissedID) {
+    const oldList = this.state.list;
+    const itemsOfDifferentId = item => item.objectID !== dismissedID;
+    const newList = oldList.filter(itemsOfDifferentId)
+    this.setState(({list: newList}))
+  }
+
+  setFilter(event) {
+    this.setState(({filter: event.target.value}))
+  }
+
+  isSubstringOf(substring, string) {
+    return string.toLowerCase().includes(substring.toLowerCase());
   }
 
   render() {
-    return (
-      <div className="App">
-        { this.state.list.map(item =>
-          <div key={item.objectID}>
-            <span>
+    return (<div className="App">
+      <form>
+        <input type="text" onChange={this.setFilter}/>
+      </form>
+      {
+        this.state.list.filter(item => this.isSubstringOf(this.state.filter, item.title)).map(item => <div key={item.objectID}>
+          <tr>
+            <td>
               <a href={item.url}>{item.title}</a>
-            </span>
-            <span>{item.author}</span>
-            <span>{item.num_comments}</span>
-            <span>{item.points}</span>
-          </div>
-        )}
-      </div>
-    );
+            </td>
+            <td>{item.author}</td>
+            <td>{item.num_comments}</td>
+            <td>{item.points}</td>
+            <td>
+              <button onClick={() => this.onDismiss(item.objectID)} type="button">
+                Dismiss
+              </button>
+            </td>
+          </tr>
+        </div>)
+      }
+    </div>);
   }
 }
 

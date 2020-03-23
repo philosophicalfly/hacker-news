@@ -9,8 +9,6 @@ import * as serviceWorker from './serviceWorker';
 ReactDOM.render(
   <React.StrictMode>
     <App />
-    <br></br>
-    <Pets />
   </React.StrictMode>,
   document.getElementById('root')
 );
