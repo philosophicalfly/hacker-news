@@ -25,19 +25,21 @@ class App extends Component {
       pet
     };
 
-    this.nextPet = () => {
-      const nextId = this.state.pet.id + 1
-      if (petList[nextId]) {
-        return this.setState(({pet: petList[nextId]}));
-      }
-      return this.setState(({pet: petList[0]}));
+    this.nextPet = this.nextPet.bind(this);
+  }
+
+  nextPet() {
+    const nextId = this.state.pet.id + 1
+    if (petList[nextId]) {
+      return this.setState(({pet: petList[nextId]}));
     }
+    return this.setState(({pet: petList[0]}));
   }
 
   render() {
     return (<div className="App">
       <span>
-        <button onClick={this.nextPet}>Troca pet</button>
+        <button onClick={() => this.nextPet()}>Troca pet</button>
       </span>
       {this.state.pet.name}
     </div>);
