@@ -1,30 +1,44 @@
 import React, {Component} from 'react';
-require('./App.css');
+import {Table, Form, Input} from "antd";
+import "antd/dist/antd.css";
+import './App.css';
 
 const list = [
   {
     title: 'React',
-    url: 'https://reactjs.org/',
+    url: <a href="https://reactjs.org/">React Site</a>,
     author: 'Jordan Walke',
-    num_comments: 3,
-    points: 4,
-    objectID: 0
+    key: 0
   }, {
     title: 'Redux',
-    url: 'https://redux.js.org/',
+    url: <a href='https://redux.js.org/'>Redux Site</a>,
     author: 'Dan Abramov, Andrew Clark',
-    num_comments: 2,
-    points: 5,
-    objectID: 1
+    key: 1
+  }
+];
+
+const columns = [
+  {
+    title: 'Titulo',
+    dataIndex: 'title',
+    key: 'title'
+  }, {
+    title: 'WebSite',
+    dataIndex: 'url',
+    key: 'url'
+  }, {
+    title: 'Autor',
+    dataIndex: 'author',
+    key: 'author'
   }
 ];
 
 class App extends Component {
-
   constructor(props) {
     super(props);
 
     this.state = {
+      columns,
       list,
       filter: ''
     };
@@ -51,7 +65,7 @@ class App extends Component {
   render() {
     return (<div className="App">
       <Search value={this.state.filter} onChange={this.setFilter}>
-        Search:
+        Search for Titles:
       </Search>
       <List list={this.state.list} onDismiss={this.onDismiss} isSubstringOf={this.isSubstringOf} filter={this.state.filter}/>
     </div>);
@@ -61,17 +75,25 @@ class App extends Component {
 class Search extends Component {
   render() {
     const {value, onChange, children} = this.props;
-    return (<form>
-      <label>{children} </label>
+    return (
+    /*<form>
+      <label>{children}
+      </label>
       <input type="text" value={value} onChange={onChange}/>
-    </form>);
+    </form>,*/
+    <Form>
+      <Form.Item label={children} value={value} onChange={onChange} name="username">
+        <Input/>
+      </Form.Item>
+    </Form>);
   }
 }
 
 class List extends Component {
   render() {
     const {list, onDismiss, isSubstringOf, filter} = this.props;
-    return (list.filter(item => isSubstringOf(filter, item.title)).map(item => <div key={item.objectID}>
+    return (
+    /*list.filter(item => isSubstringOf(filter, item.title)).map(item => <div key={item.objectID}>
       <table>
         <tbody>
           <tr>
@@ -82,14 +104,15 @@ class List extends Component {
             <td>{item.num_comments}</td>
             <td>{item.points}</td>
             <td>
-              <button onClick={() => onDismiss(item.objectID)} type="button">
+              <Button onClick={() => onDismiss(item.objectID)} type="button">
                 Dismiss
-              </button>
+              </Button>
             </td>
           </tr>
         </tbody>
       </table>
-    </div>))
+    </div>),*/
+    <Table dataSource={list.filter(item => isSubstringOf(filter, item.title))} columns={columns}/>)
   }
 }
 
