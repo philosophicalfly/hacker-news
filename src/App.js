@@ -19,8 +19,6 @@ const list = [
   }
 ];
 
-const isSearched = (searchTerm) => (item) => item.title.toLowerCase().includes(searchTerm.toLowerCase());
-
 class App extends Component {
 
   constructor(props) {
@@ -39,11 +37,11 @@ class App extends Component {
     const oldList = this.state.list;
     const itemsOfDifferentId = item => item.objectID !== dismissedID;
     const newList = oldList.filter(itemsOfDifferentId)
-    this.setState(({list: newList}))
+    this.setState({list: newList})
   }
 
   setFilter(event) {
-    this.setState(({filter: event.target.value}))
+    this.setState({filter: event.target.value});
   }
 
   isSubstringOf(substring, string) {
@@ -53,23 +51,27 @@ class App extends Component {
   render() {
     return (<div className="App">
       <form>
-        <input type="text" onChange={this.setFilter}/>
+        <input type="text" value={this.state.filter} onChange={this.setFilter}/>
       </form>
       {
         this.state.list.filter(item => this.isSubstringOf(this.state.filter, item.title)).map(item => <div key={item.objectID}>
-          <tr>
-            <td>
-              <a href={item.url}>{item.title}</a>
-            </td>
-            <td>{item.author}</td>
-            <td>{item.num_comments}</td>
-            <td>{item.points}</td>
-            <td>
-              <button onClick={() => this.onDismiss(item.objectID)} type="button">
-                Dismiss
-              </button>
-            </td>
-          </tr>
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <a href={item.url}>{item.title}</a>
+                </td>
+                <td>{item.author}</td>
+                <td>{item.num_comments}</td>
+                <td>{item.points}</td>
+                <td>
+                  <button onClick={() => this.onDismiss(item.objectID)} type="button">
+                    Dismiss
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>)
       }
     </div>);
