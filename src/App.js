@@ -50,7 +50,9 @@ class App extends Component {
 
   render() {
     return (<div className="App">
-      <Search value={this.state.filter} onChange={this.setFilter}/>
+      <Search value={this.state.filter} onChange={this.setFilter}>
+        Search:
+      </Search>
       <List list={this.state.list} onDismiss={this.onDismiss} isSubstringOf={this.isSubstringOf} filter={this.state.filter}/>
     </div>);
   }
@@ -58,8 +60,9 @@ class App extends Component {
 
 class Search extends Component {
   render() {
-    const {value, onChange} = this.props;
+    const {value, onChange, children} = this.props;
     return (<form>
+      <label>{children} </label>
       <input type="text" value={value} onChange={onChange}/>
     </form>);
   }
