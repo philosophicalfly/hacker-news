@@ -50,31 +50,43 @@ class App extends Component {
 
   render() {
     return (<div className="App">
-      <form>
-        <input type="text" value={this.state.filter} onChange={this.setFilter}/>
-      </form>
-      {
-        this.state.list.filter(item => this.isSubstringOf(this.state.filter, item.title)).map(item => <div key={item.objectID}>
-          <table>
-            <tbody>
-              <tr>
-                <td>
-                  <a href={item.url}>{item.title}</a>
-                </td>
-                <td>{item.author}</td>
-                <td>{item.num_comments}</td>
-                <td>{item.points}</td>
-                <td>
-                  <button onClick={() => this.onDismiss(item.objectID)} type="button">
-                    Dismiss
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>)
-      }
+      <Search value={this.state.filter} onChange={this.setFilter}/>
+      <List list={this.state.list} onDismiss={this.onDismiss} isSubstringOf={this.isSubstringOf} filter={this.state.filter}/>
     </div>);
+  }
+}
+
+class Search extends Component {
+  render() {
+    const {value, onChange} = this.props;
+    return (<form>
+      <input type="text" value={value} onChange={onChange}/>
+    </form>);
+  }
+}
+
+class List extends Component {
+  render() {
+    const {list, onDismiss, isSubstringOf, filter} = this.props;
+    return (list.filter(item => isSubstringOf(filter, item.title)).map(item => <div key={item.objectID}>
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              <a href={item.url}>{item.title}</a>
+            </td>
+            <td>{item.author}</td>
+            <td>{item.num_comments}</td>
+            <td>{item.points}</td>
+            <td>
+              <button onClick={() => onDismiss(item.objectID)} type="button">
+                Dismiss
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>))
   }
 }
 
